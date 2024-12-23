@@ -83,7 +83,7 @@
     }
 
     function finalQuestionAnswer() {
-      if (document.getElementById("fqText").value == "Alina") {
+      if (document.getElementById("fqText").value.trim() == "Alina") {
         switchRoom("finalSolution");
       } else {
         document.getElementById('fqFeedback').innerText = "Falsche Antwort";

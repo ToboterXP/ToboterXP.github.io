@@ -22,7 +22,7 @@
     }
 
     function onAnswer() {
-      let userAns = document.getElementById('answer').value;
+      let userAns = document.getElementById('answer').value.trim();
       if (userAns == questions[currQuestion][2]) {
         currQuestion++;
         if (currQuestion < questions.length) {
