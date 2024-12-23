@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    p {font-size: 20px;}
+    li {margin-bottom: 20px;}
+  </style>
+
+  <script>
+    var currentRoom = "roomMain";
+    var hasIncense = false;
+    var hasMyrrhe = false;
+    var hasGold = false;
+
+    var holding = [0,0,0];
+    var things = ["","Weihrauch","Gold","Myrrhe"]
+
+    function switchRoom(id) {
+      document.getElementById(currentRoom).style.display = "none";
+      document.getElementById(id).style.display = "inline";
+      document.getElementById('fqFeedback').innerText = "";
+      currentRoom = id;
+    }
+
+    function takeIncense() {
+      document.getElementById('weihrauch1').innerText = "";
+      document.getElementById('weihrauch1o').style.display = "none";
+      let els = document.getElementsByClassName('weihrauch');
+      for (let i=0;i<els.length;i++) {els[i].style.display = "list-item";}
+
+      hasIncense = true;
+    }
+
+    function takeMyrrhe() {
+      document.getElementById('myrrhe1').innerText = "";
+      document.getElementById('myrrhe1o').style.display = "none";
+      let els = document.getElementsByClassName('myrrhe');
+      for (let i=0;i<els.length;i++) {els[i].style.display = "list-item";}
+      hasMyrrhe = true;
+    }
+
+    function takeGold() {
+      document.getElementById('gold1').innerText = "";
+      document.getElementById('gold1o').style.display = "none";
+      let els = document.getElementsByClassName('gold');
+      for (let i=0;i<els.length;i++) {els[i].style.display = "list-item";}
+      hasGold = true;
+    }
+
+    function giveKing(id, thing) {
+      for(let i=0; i<holding.length; i++) {
+        if (holding[i] == thing) holding[i] = 0;
+      }
+      holding[id] = thing;
+      updateHoldingDescriptions();
+    }
+
+    function updateHoldingDescriptions() {
+      let all = "";
+      if (holding[0] != 0) {
+        document.getElementById("holdingText1").innerText = "Er hält "+things[holding[0]]+" in den Händen";
+        all += "Der linke Herr hält "+things[holding[0]]+" in den Händen<br>";
+      }
+
+      if (holding[1] != 0) {
+        document.getElementById("holdingText2").innerText = "Er hält "+things[holding[1]]+" in den Händen";
+        all += "Der mittlere Herr hält "+things[holding[1]]+" in den Händen<br>";
+      }
+
+      if (holding[2] != 0) {
+        document.getElementById("holdingText3").innerText = "Er hält "+things[holding[2]]+" in den Händen";
+        all += "Der rechte Herr hält "+things[holding[2]]+" in den Händen<br>";
+      }
+
+      if (holding[0] == 1 && holding[1] == 2 && holding[2] == 3) {
+        all += "Die Herren bedanken sich für die korrekten Geschenke. Sie bitten um eine letzte Frage."
+        document.getElementById("fqOption").style.display="list-item";
+      } else {
+        document.getElementById("fqOption").style.display="none";
+      }
+      document.getElementById("holdingTextAll").innerHTML = all;
+    }
+
+    function finalQuestionAnswer() {
+      if (document.getElementById("fqText").value == "Alina") {
+        switchRoom("finalSolution");
+      } else {
+        document.getElementById('fqFeedback').innerText = "Falsche Antwort";
+      }
+    }
+  </script>
+  </head>
+
+<body>
+
+  <div id="roomMain">
+    <p>Du stehst in einem Stall in Bethlehem. Der Boden ist strohbedeckt. Es ist kalt.
+      Eine Frau und ein Mann stehe neben der Krippe. In der Ecke liegen ein Esel und ein Ochse.
+      Am Eingang stehen drei prächtig gekleidete Männer. Was tust du?</p>
+
+      <ul>
+        <li><a href="#" onclick="switchRoom('roomKings');">Rede mit den Männern</a></li>
+        <li><a href="#" onclick="switchRoom('roomDonkey');">Begutachte den Esel</a></li>
+        <li><a href="#" onclick="switchRoom('roomOx');">Begutachte den Ochsen</a></li>
+        <li><a href="#" onclick="switchRoom('roomCrib');">Schau in die Krippe</a></li>
+        </ul>
+    </div>
+
+  <div id="finalQuestion" style="display:none">
+    <p>Wie hieß das Baby?</p>
+    <input type="text" id="fqText"><button type="button" onclick="finalQuestionAnswer()">Antworten</button>
+    <p id="fqFeedback"></p>
+    <a href="#" onclick="switchRoom('roomKings')">Zurück</a>
+    </div>
+
+  <div id="finalSolution" style="display:none">
+    <h2>Du hast das Rätsel erfolgreich gelöst. Fröhliche Weihnachten!</h2>
+    </div>
+
+
+  <div id="roomKings" style="display:none">
+    <p>Vor dir stehen drei prunkvoll gekleidete Herren. Sie scheinen aus fernem Lande zu stammen.</p>
+    <p id="holdingTextAll"></p>
+    <ul>
+      <li><a href="#" onclick="switchRoom('roomKing1')">Rede mit dem linken Herr</a></li>
+      <li><a href="#" onclick="switchRoom('roomKing2')">Rede mit dem mittleren Herr</a></li>
+      <li><a href="#" onclick="switchRoom('roomKing3')">Rede mit dem rechten Herr</a></li>
+      <li id="fqOption" style="display:none"><a href="#" onclick="switchRoom('finalQuestion')">Beantworte die letzte Frage</a></li>
+      <li><a href="#" onclick="switchRoom('roomMain')">Zurück</a></li>
+    </div>
+
+  <div id="roomKing1" style="display:none">
+    <p>Der linke Herr verneigt sich: "Wir sind Caspar, Melchior und Balthasar. Zu meiner Linken steht Melchior."</p>
+    <p id="holdingText1"></p>
+    <ul>
+      <li class="gold" style="display:none"><a href="#" onclick="giveKing(0,2);">Reiche ihm das Gold</a></li>
+      <li class="weihrauch" style="display:none"><a href="#" onclick="giveKing(0,1);">Reiche ihm den Weihrauch</a></li>
+      <li class="myrrhe" style="display:none"><a href="#" onclick="giveKing(0,3);">Reiche ihm die Myrrhe</a></li>
+      <li><a href="#" onclick="switchRoom('roomKings')">Zurück</a></li>
+    </div>
+
+  <div id="roomKing2" style="display:none">
+    <p>Der mittlere Herr verneigt sich: "Wir bringen Gold, Weihrauch und Myrrhe. Zu meiner Linken steht Caspar."</p>
+    <p id="holdingText2"></p>
+    <ul>
+      <li class="gold" style="display:none"><a href="#" onclick="giveKing(1,2);">Reiche ihm das Gold</a></li>
+      <li class="weihrauch" style="display:none"><a href="#" onclick="giveKing(1,1);">Reiche ihm den Weihrauch</a></li>
+      <li class="myrrhe" style="display:none"><a href="#" onclick="giveKing(1,3);">Reiche ihm die Myrrhe</a></li>
+      <li><a href="#" onclick="switchRoom('roomKings')">Zurück</a></li>
+    </div>
+
+  <div id="roomKing3" style="display:none">
+    <p>Der rechte Herr verneigt sich: "Keine zwei, die nebeneinander stehen, brachten Räucherwerk. Der längste Name brachte das längste Wort."</p>
+    <p id="holdingText3"></p>
+    <ul>
+      <li class="gold" style="display:none"><a href="#" onclick="giveKing(2,2);">Reiche ihm das Gold</a></li>
+      <li class="weihrauch" style="display:none"><a href="#" onclick="giveKing(2,1);">Reiche ihm den Weihrauch</a></li>
+      <li class="myrrhe" style="display:none"><a href="#" onclick="giveKing(2,3);">Reiche ihm die Myrrhe</a></li>
+      <li><a href="#" onclick="switchRoom('roomKings')">Zurück</a></li>
+    </div>
+
+
+  <div id="roomDonkey" style="display:none">
+    <p>Ein Esel liegt in der Ecke und kaut müde auf einer Karotte.</p>
+    <p id="weihrauch1">Neben ihm liegt eine verzierte Schachtel im Stroh. Sie scheint Weihrauch zu enthalten.</p>
+
+    <ul>
+      <li id="weihrauch1o"><a href="#" onclick="takeIncense();">Nimm die Schachtel</a></li>
+      <li><a href="#" onclick="switchRoom('roomMain')">Zurück</a></li>
+    </div>
+
+  <div id="roomOx" style="display:none">
+    <p>Der Ochse liegt neben dem Esel. Er scheint zu schlafen. </p>
+    <p id="myrrhe1">An seinem Huf liegt eine Schachtel voll Myrrhe</p>
+
+    <ul>
+      <li id="myrrhe1o"><a href="#" onclick="takeMyrrhe();">Nimm die Schachtel</a></li>
+      <li><a href="#" onclick="switchRoom('roomMain')">Zurück</a></li>
+    </div>
+
+  <div id="roomCrib" style="display:none">
+    <p>Mutter und Vater sehen müde aus. In der Krippe liegt ein Kind, auf Heu gebettet.</p>
+    <p id="gold1">Im Heu scheint etwas zu glänzen.</p>
+
+    <ul>
+      <li id="gold1o"><a href="#" onclick="takeGold();">Nimm das Gold</a></li>
+      <li><a href="#" onclick="switchRoom('roomMain')">Zurück</a></li>
+    </div>
+
+</body>
+</html>

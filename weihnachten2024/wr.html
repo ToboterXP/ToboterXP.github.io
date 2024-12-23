@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    var questions = [
+    ["Welcher Tag ist heute?", "Weihnachten"],
+    ["Wer brachte Antons grünes Geschenk?", "Weihnachtsmann"],
+    ["Was bringt der linke König?", "Weihrauch"],
+    ["Was frisst der Esel?", "Karotte"],
+    ["Anton hat zwei jüngere Schwestern, Hanna und Marie. Marie wollte auch ein grünes Geschenk, \
+    aber das Papier war alle. Also brachte der Weihnachtsmann ein ähnliches. Hanna mochte aber kein Grün.\
+    Also bekam sie ein möglichst anderes. Was ist in Hannas Geschenk?", "Taschenlampe"],
+    ["Wie hieß das Baby?", "Alina"]
+    ];
+    var currQuestion = 0
+
+    function updateQuestion() {
+      document.getElementById("question").innerHTML = "Frage "+(currQuestion+1)+"/6: "+questions[currQuestion][0];
+      document.getElementById("feedback").innerHTML = "";
+      document.getElementById('answer').value = "";
+    }
+
+    function onAnswer() {
+      let userAns = document.getElementById('answer').value;
+      if (userAns == questions[currQuestion][1]) {
+        currQuestion++;
+        if (currQuestion < questions.length) {
+          updateQuestion();
+        } else {
+          document.getElementById("questionMain").style.display = "none";
+          document.getElementById("final").style.display = "inline";
+        }
+      } else {
+        document.getElementById("feedback").innerHTML = "Falsche Antwort";
+        setTimeout(() => {document.getElementById("feedback").innerHTML = "";}, 1000)
+      }
+    }
+    </script>
+  </head>
+<body>
+  <div id="questionMain">
+    <h2>Das Weihnachtsrätsel</h2>
+    <p id="question"></p>
+    <input type="text" id="answer"><button onclick="onAnswer();">Answer</button>
+    <p id="feedback"></p>
+    </div>
+
+  <div id="final" style="display:none">
+    <h2>Du hast das Rätsel erfolgreich gelöst. Fröhliche Weihnachten!</h2>
+    </div>
+
+  <script>updateQuestion();</script>
+  </body>
+
+</html>
